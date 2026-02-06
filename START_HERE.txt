@@ -1,0 +1,84 @@
+═══════════════════════════════════════════════════════════════
+   🚀 AUTOSAR CHECKER - TESTING INSTRUCTIONS
+═══════════════════════════════════════════════════════════════
+
+STEP 1: Click on the "Run and Debug" icon
+────────────────────────────────────────────
+• Look at the LEFT sidebar in VS Code
+• Click the icon that looks like a "Play button with a bug" 
+  (or press Ctrl+Shift+D)
+
+STEP 2: Start the Extension
+────────────────────────────────────────────
+You'll see two options at the top:
+
+Option A: Click the GREEN PLAY BUTTON next to "Run Extension"
+Option B: Press F5 on your keyboard
+
+STEP 3: Wait for the New Window
+────────────────────────────────────────────
+• A NEW VS Code window will open (takes 5-10 seconds)
+• The title bar will say "[Extension Development Host]"
+• This means your extension is NOW RUNNING in that window
+
+STEP 4: Open the Test File
+────────────────────────────────────────────
+In the NEW window that just opened:
+• Press Ctrl+O (or File > Open File)
+• Navigate to: D:\AUTOSAR Compiler\example.cpp
+• Open it
+
+STEP 5: See the Warnings! ✨
+────────────────────────────────────────────
+You should NOW see:
+✓ Red squiggly lines under "goto" (line 17)
+✓ Red squiggly lines under "throw 42" (line 24)
+✓ Yellow squiggly lines under "int numbers[10]" (line 7)
+✓ Info squiggly lines under numbers like "100", "42", etc.
+
+STEP 6: View All Problems
+────────────────────────────────────────────
+In the Extension Development Host window:
+• Press Ctrl+Shift+M (or View > Problems)
+• You'll see a list of ALL AUTOSAR violations found
+
+STEP 7: Test Quick Fix
+────────────────────────────────────────────
+• Click on line 17 (the "goto cleanup;" line)
+• Press Ctrl+. (Control + Period)
+• You'll see: "Suppress A1-1-1 on next line"
+• Click it - a comment will be added automatically!
+
+═══════════════════════════════════════════════════════════════
+
+TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+❌ "Cannot find Run Extension"
+   → Make sure you're in the Run and Debug view (Ctrl+Shift+D)
+
+❌ "Extension Development Host doesn't open"
+   → Check the Terminal panel for errors
+   → Try running: npm run compile
+
+❌ "No warnings showing in the new window"
+   → Make sure you opened example.cpp IN THE NEW WINDOW
+   → Check that the file extension is .cpp
+   → Look at Output panel > "AUTOSAR Checker" for logs
+
+❌ "Still not working"
+   → Close both windows
+   → Reopen this folder: File > Open Folder > D:\AUTOSAR Compiler
+   → Try again from STEP 1
+
+═══════════════════════════════════════════════════════════════
+
+QUICK REFERENCE
+═══════════════════════════════════════════════════════════════
+
+Start Extension:       F5 or Run and Debug > Run Extension
+Open Problems Panel:   Ctrl+Shift+M
+Quick Fix:            Ctrl+. (on a warning line)
+Stop Debugging:       Shift+F5
+
+═══════════════════════════════════════════════════════════════
