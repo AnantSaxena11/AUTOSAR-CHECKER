@@ -2,7 +2,7 @@
   "name": "autosar-checker",
   "displayName": "AUTOSAR Checker",
   "description": "Real-time AUTOSAR compliance checker for C/C++ code",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "publisher": "autosar-dev",
   "repository": {
     "type": "git",
@@ -20,12 +20,66 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "autosarCheckerContainer",
+          "title": "AUTOSAR Checker",
+          "icon": "$(shield)"
+        }
+      ]
+    },
+    "views": {
+      "autosarCheckerContainer": [
+        {
+          "id": "autosarViolations",
+          "name": "Violations",
+          "icon": "$(warning)",
+          "contextualTitle": "AUTOSAR Violations"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "autosar-checker.checkCurrentFile",
-        "title": "AUTOSAR: Check Current File"
+        "title": "AUTOSAR: Check Current File",
+        "icon": "$(play)"
+      },
+      {
+        "command": "autosar-checker.togglePause",
+        "title": "AUTOSAR: Pause/Resume Checker",
+        "icon": "$(debug-pause)"
+      },
+      {
+        "command": "autosar-checker.rerunCheck",
+        "title": "AUTOSAR: Rerun Check",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "autosar-checker.clearViolations",
+        "title": "AUTOSAR: Clear All Violations",
+        "icon": "$(clear-all)"
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "autosar-checker.rerunCheck",
+          "when": "view == autosarViolations",
+          "group": "navigation@1"
+        },
+        {
+          "command": "autosar-checker.togglePause",
+          "when": "view == autosarViolations",
+          "group": "navigation@2"
+        },
+        {
+          "command": "autosar-checker.clearViolations",
+          "when": "view == autosarViolations",
+          "group": "navigation@3"
+        }
+      ]
+    },
     "languages": [
       {
         "id": "cpp",

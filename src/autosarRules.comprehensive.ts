@@ -480,16 +480,22 @@ export function isRuleSuppressed(document: string, lineNumber: number, ruleCode:
     // Check the line above for suppression comment
     if (lineNumber > 0) {
         const previousLine = lines[lineNumber - 1];
+        // Check multiple suppression formats
         if (previousLine.includes(`// autosar-disable-next-line ${ruleCode}`) ||
-            previousLine.includes(`/* autosar-disable-next-line ${ruleCode} */`)) {
+            previousLine.includes(`/* autosar-disable-next-line ${ruleCode} */`) ||
+            previousLine.includes(`// suppress-next-line: ${ruleCode}`) ||
+            previousLine.includes(`/* suppress-next-line: ${ruleCode} */`)) {
             return true;
         }
     }
     
     // Check the same line for suppression comment
     const currentLine = lines[lineNumber];
+    // Check multiple suppression formats
     if (currentLine.includes(`// autosar-disable-line ${ruleCode}`) ||
-        currentLine.includes(`/* autosar-disable-line ${ruleCode} */`)) {
+        currentLine.includes(`/* autosar-disable-line ${ruleCode} */`) ||
+        currentLine.includes(`// suppress-line: ${ruleCode}`) ||
+        currentLine.includes(`/* suppress-line: ${ruleCode} */`)) {
         return true;
     }
     
