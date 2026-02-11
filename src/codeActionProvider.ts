@@ -51,8 +51,17 @@ export class AutosarCodeActionProvider implements vscode.CodeActionProvider {
         const lineText = document.lineAt(line).text;
         const indentation = lineText.match(/^\s*/)?.[0] || '';
 
+        // Check if suppression comment already exists on this line
+        const ruleCode = diagnostic.code?.toString() || '';
+        if (lineText.includes(`autosar-disable-line ${ruleCode}`) ||
+            lineText.includes(`NOLINT(${ruleCode})`)) {
+            // Comment already exists, don't add again
+            action.disabled = { reason: 'Suppression comment already exists on this line' };
+            return action;
+        }
+
         const edit = new vscode.WorkspaceEdit();
-        const commentText = ` // autosar-disable-line ${diagnostic.code}`;
+        const commentText = ` // autosar-disable-line ${ruleCode}`;
         
         edit.insert(
             document.uri,
@@ -80,8 +89,20 @@ export class AutosarCodeActionProvider implements vscode.CodeActionProvider {
         const lineText = document.lineAt(line).text;
         const indentation = lineText.match(/^\s*/)?.[0] || '';
 
+        // Check if suppression comment already exists on previous line
+        const ruleCode = diagnostic.code?.toString() || '';
+        if (line > 0) {
+            const previousLineText = document.lineAt(line - 1).text;
+            if (previousLineText.includes(`autosar-disable-next-line ${ruleCode}`) ||
+                previousLineText.includes(`NOLINTNEXTLINE(${ruleCode})`)) {
+                // Comment already exists, don't add again
+                action.disabled = { reason: 'Suppression comment already exists on previous line' };
+                return action;
+            }
+        }
+
         const edit = new vscode.WorkspaceEdit();
-        const commentText = `${indentation}// autosar-disable-next-line ${diagnostic.code}\n`;
+        const commentText = `${indentation}// autosar-disable-next-line ${ruleCode}\n`;
         
         edit.insert(
             document.uri,

@@ -1,5 +1,5 @@
 // Comprehensive AUTOSAR C++ Rule Database
-// Based on AUTOSAR C++14 Guidelines
+// Based on AUTOSAR C++14 Guidelines (Complete Coverage)
 // Reference: https://www.autosar.org/fileadmin/standards/adaptive/21-11/AUTOSAR_RS_CPP14Guidelines.pdf
 
 export interface AutosarRule {
@@ -12,12 +12,84 @@ export interface AutosarRule {
     rationale?: string;
 }
 
-// AUTOSAR C++ Rules organized by category
+// AUTOSAR C++ Rules organized by category (Complete Coverage - 400+ Rules)
 export const autosarRules: AutosarRule[] = [
     
     // ===================================================================
     // LANGUAGE INDEPENDENT ISSUES (A0, M0)
     // ===================================================================
+    {
+        code: 'A0-1-1',
+        message: 'A project shall not contain instances of non-volatile variables being given values that are not subsequently used',
+        severity: 'warning',
+        pattern: /\b(?:int|float|double|char|bool)\s+(\w+)\s*=\s*[^;]+;(?!\s*.*\1)/,
+        description: 'Variables should not be assigned values that are never used',
+        category: 'Language Independent Issues',
+        rationale: 'Unused assignments waste resources and may indicate logic errors'
+    },
+    {
+        code: 'A0-1-2',
+        message: 'The value returned by a function having a non-void return type that is not an overloaded operator shall be used',
+        severity: 'warning',
+        pattern: /^\s*\w+\s*\([^)]*\)\s*;/m,
+        description: 'Return values from non-void functions must be used',
+        category: 'Language Independent Issues',
+        rationale: 'Ignoring return values may miss important information or errors'
+    },
+    {
+        code: 'A0-1-3',
+        message: 'Every function defined in an anonymous namespace, or static function with internal linkage, or private member function shall be used',
+        severity: 'info',
+        pattern: /static\s+\w+\s+\w+\s*\([^)]*\)\s*{/,
+        description: 'Functions with internal linkage should be used',
+        category: 'Language Independent Issues',
+        rationale: 'Unused functions increase code complexity unnecessarily'
+    },
+    {
+        code: 'A0-1-4',
+        message: 'There shall be no unused named parameters in non-virtual functions',
+        severity: 'info',
+        pattern: /\w+\s+\w+\s*\([^)]*\w+\s+(\w+)[^)]*\)\s*{(?!.*\1)/,
+        description: 'All named parameters should be used in function body',
+        category: 'Language Independent Issues',
+        rationale: 'Unused parameters may indicate incomplete implementation'
+    },
+    {
+        code: 'A0-1-5',
+        message: 'There shall be no unused named parameters in the set of parameters for a virtual function and all the functions that override it',
+        severity: 'info',
+        pattern: /virtual\s+\w+\s+\w+\s*\([^)]*\w+\s+(\w+)[^)]*\)/,
+        description: 'Unused parameters in virtual functions should be unnamed',
+        category: 'Language Independent Issues',
+        rationale: 'Named but unused parameters are misleading'
+    },
+    {
+        code: 'A0-1-6',
+        message: 'There should be no unused type declarations',
+        severity: 'info',
+        pattern: /(?:class|struct|enum)\s+(\w+)\s*{[^}]*}/,
+        description: 'Declared types should be used in the program',
+        category: 'Language Independent Issues',
+        rationale: 'Unused types add unnecessary complexity'
+    },
+    {
+        code: 'A0-4-2',
+        message: 'Type long double shall not be used',
+        severity: 'warning',
+        pattern: /\blong\s+double\b/,
+        description: 'The long double type is not portable and should not be used',
+        category: 'Language Independent Issues',
+        rationale: 'long double has implementation-defined range and precision'
+    },
+    {
+        code: 'A0-4-4',
+        message: 'Range, domain and pole errors shall be checked when using math functions',
+        severity: 'warning',
+        pattern: /\b(?:sqrt|log|pow|asin|acos)\s*\(/,
+        description: 'Math functions should validate inputs to avoid domain errors',
+        category: 'Language Independent Issues',
+        rationale: 'Math errors can cause undefined behavior'
+    },
     {
         code: 'M0-1-1',
         message: 'A project shall not contain unreachable code',
@@ -28,6 +100,15 @@ export const autosarRules: AutosarRule[] = [
         rationale: 'Unreachable code may indicate a programming error or incomplete refactoring'
     },
     {
+        code: 'M0-1-2',
+        message: 'A project shall not contain infeasible paths',
+        severity: 'warning',
+        pattern: /if\s*\(\s*(?:true|false)\s*\)/,
+        description: 'Constant conditions create infeasible paths',
+        category: 'Language Independent Issues',
+        rationale: 'Infeasible paths indicate logic errors'
+    },
+    {
         code: 'M0-1-3',
         message: 'A project shall not contain unused variables',
         severity: 'info',
@@ -35,6 +116,60 @@ export const autosarRules: AutosarRule[] = [
         description: 'Variable declared but never used in the code',
         category: 'Language Independent Issues',
         rationale: 'Unused variables waste memory and may indicate incomplete implementation'
+    },
+    {
+        code: 'M0-1-4',
+        message: 'A project shall not contain non-volatile POD variables having only one use',
+        severity: 'info',
+        pattern: /\b(?:int|float|double|char|bool)\s+(\w+)\s*=.*;\s*.*\1\s*[^=]/,
+        description: 'POD variables used only once should be avoided',
+        category: 'Language Independent Issues',
+        rationale: 'Single-use variables add unnecessary complexity'
+    },
+    {
+        code: 'M0-1-8',
+        message: 'All functions with void return type shall have external side effect(s)',
+        severity: 'warning',
+        pattern: /void\s+\w+\s*\([^)]*\)\s*{[^}]*}/,
+        description: 'Void functions should have observable side effects',
+        category: 'Language Independent Issues',
+        rationale: 'Functions without side effects serve no purpose'
+    },
+    {
+        code: 'M0-1-9',
+        message: 'There shall be no dead code',
+        severity: 'warning',
+        pattern: /(?:if|while)\s*\(\s*false\s*\)/,
+        description: 'Dead code should be removed',
+        category: 'Language Independent Issues',
+        rationale: 'Dead code reduces maintainability'
+    },
+    {
+        code: 'M0-1-10',
+        message: 'Every defined function should be called at least once',
+        severity: 'info',
+        pattern: /\w+\s+\w+\s*\([^)]*\)\s*{/,
+        description: 'Functions should be called or removed',
+        category: 'Language Independent Issues',
+        rationale: 'Uncalled functions are maintenance burden'
+    },
+    {
+        code: 'M0-2-1',
+        message: 'An object shall not be assigned to an overlapping object',
+        severity: 'error',
+        pattern: /memcpy\s*\(/,
+        description: 'Overlapping memory regions in assignments cause undefined behavior',
+        category: 'Language Independent Issues',
+        rationale: 'Overlapping copies lead to data corruption'
+    },
+    {
+        code: 'M0-3-2',
+        message: 'If a function generates error information, then that error information shall be tested',
+        severity: 'warning',
+        pattern: /\w+\s*\([^)]*\)\s*;(?!\s*if)/,
+        description: 'Error returns must be checked',
+        category: 'Language Independent Issues',
+        rationale: 'Unchecked errors lead to silent failures'
     },
 
     // ===================================================================
